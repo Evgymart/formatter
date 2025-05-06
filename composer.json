@@ -1,6 +1,6 @@
 {
-    "name": "typhoon/template",
-    "description": "Typhoon Template",
+    "name": "typhoon/formatter",
+    "description": "Typhoon Formatter",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -22,13 +22,18 @@
         "symfony/var-dumper": "^6.4.21 || ^7.2.3"
     },
     "autoload": {
-        "psr-4": {
-            "Typhoon\\Template\\": "src/"
-        }
+        "files": [
+            "src/format.php",
+            "src/formatClass.php",
+            "src/formatFunction.php",
+            "src/formatReflectedClass.php",
+            "src/formatReflectedFunction.php",
+            "src/formatReflectedType.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Typhoon\\Template\\": "tests/"
+            "Typhoon\\Formatter\\": "tests/"
         }
     },
     "config": {
