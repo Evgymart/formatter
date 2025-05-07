@@ -42,7 +42,7 @@ function format(mixed $value): string
         return \sprintf('array{%s}', implode(', ', array_map(
             static fn(mixed $key, mixed $value): string => \sprintf(
                 '%s: %s',
-                format($key),
+                (\is_string($key) && str_contains($key, "'")) ? format($key) : $key,
                 format($value),
             ),
             array_keys($value),
