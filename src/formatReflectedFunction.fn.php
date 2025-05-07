@@ -11,7 +11,7 @@ namespace Typhoon\Formatter;
 function formatReflectedFunction(\ReflectionFunctionAbstract $function): string
 {
     if ($function instanceof \ReflectionMethod) {
-        return \sprintf('%s::%s()', formatClass($function->class), $function->name);
+        return \sprintf('%s::%s', formatClass($function->class), $function->name);
     }
 
     if (str_contains($function->name, '{closure}')) {
@@ -33,7 +33,7 @@ function formatReflectedFunction(\ReflectionFunctionAbstract $function): string
     $class = $function->getClosureCalledClass();
 
     if ($class !== null) {
-        return \sprintf('%s::%s()', formatClass($class), $function->name);
+        return \sprintf('%s::%s', formatClass($class), $function->name);
     }
 
     \assert($function->name !== '');
