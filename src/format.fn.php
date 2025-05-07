@@ -50,6 +50,20 @@ function format(mixed $value): string
         )));
     }
 
+    if ($value instanceof \stdClass) {
+        $properties = get_object_vars($value);
+
+        return \sprintf('object{%s}', implode(', ', array_map(
+            static fn(string $property, mixed $value): string => \sprintf(
+                '%s: %s',
+                str_contains($property, "'") ? format($property) : $property,
+                format($value),
+            ),
+            array_keys($properties),
+            $properties,
+        )));
+    }
+
     if ($value instanceof \UnitEnum) {
         return \sprintf('%s::%s', $value::class, $value->name);
     }
