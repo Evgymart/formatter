@@ -33,7 +33,7 @@ function formatReflectedFunction(\ReflectionFunctionAbstract $function): string
     $class = $function->getClosureCalledClass();
 
     if ($class !== null) {
-        return \sprintf('%s::%s', formatClass($class), $function->name);
+        return \sprintf('%s::%s', formatReflectedClass($class), $function->name);
     }
 
     \assert($function->name !== '');
