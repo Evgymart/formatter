@@ -10,5 +10,6 @@ namespace Typhoon\Formatter;
  */
 function formatReflectedProperty(\ReflectionProperty $property): string
 {
+    /** @phpstan-ignore argument.type */
     return formatProperty($property->class, $property->name);
 }

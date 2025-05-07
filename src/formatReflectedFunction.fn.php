@@ -11,32 +11,34 @@ namespace Typhoon\Formatter;
 function formatReflectedFunction(\ReflectionFunctionAbstract $function): string
 {
     if ($function instanceof \ReflectionMethod) {
-        return \sprintf('%s::%s', formatClass($function->class), $function->name);
+        return \sprintf('%s::%s()', formatClass($function->class), $function->name);
     }
 
-    if (str_contains($function->name, '{closure}')) {
-        $file = $function->getFileName();
+    if (!str_contains($function->name, '{closure}')) {
+        $class = $function->getClosureCalledClass();
 
-        if ($file === false) {
-            return 'function@anonymous';
+        if ($class !== null) {
+            return \sprintf('%s::%s()', formatReflectedClass($class), $function->name);
         }
 
-        $line = $function->getStartLine();
-
-        if ($line === false) {
-            return \sprintf('function@anonymous:%s', $file);
-        }
-
-        return \sprintf('function@anonymous:%s:%d', $file, $line);
+        return $function->name . '()';
     }
 
-    $class = $function->getClosureCalledClass();
+    $file = $function->getFileName();
 
-    if ($class !== null) {
-        return \sprintf('%s::%s', formatReflectedClass($class), $function->name);
+    if ($file === false) {
+        return 'function()';
     }
 
-    \assert($function->name !== '');
+    if (preg_match('/^(.*)\((\d+)\)/', $file, $matches)) {
+        return \sprintf('function@%s:%d()', $matches[1], $matches[2]);
+    }
 
-    return $function->name;
+    $line = $function->getStartLine();
+
+    if ($line === false) {
+        return \sprintf('function@%s()', $file);
+    }
+
+    return \sprintf('function@%s:%d()', $file, $line);
 }

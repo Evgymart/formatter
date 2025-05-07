@@ -10,5 +10,5 @@ namespace Typhoon\Formatter;
  */
 function formatReflectedParameter(\ReflectionParameter $parameter): string
 {
-    return sprintf('%s($%s)', formatReflectedFunction($parameter->getDeclaringFunction()), $parameter->name);
+    return \sprintf('%s($%s)', formatReflectedFunction($parameter->getDeclaringFunction()), $parameter->name);
 }

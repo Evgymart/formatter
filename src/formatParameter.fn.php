@@ -7,10 +7,10 @@ namespace Typhoon\Formatter;
 /**
  * @api
  * @param callable $function native type is intentionally not used to avoid autoloading during callable type check
- * @param non-empty-string $parameter
+ * @param non-negative-int|non-empty-string $parameter
  * @return non-empty-string
  */
-function formatParameter(mixed $function, string $parameter): string
+function formatParameter(mixed $function, int|string $parameter): string
 {
-    return sprintf('%s($%s)', formatFunction($function), $parameter);
+    return \sprintf('%s$%s)', substr(formatFunction($function), 0, -1), $parameter);
 }

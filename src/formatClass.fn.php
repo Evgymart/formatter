@@ -15,8 +15,8 @@ function formatClass(string|object $class): string
         $class = $class::class;
     }
 
-    if (preg_match('/^(.+)\x00(.+?)[:(](\d+)/', $class, $matches)) {
-        return "{$matches[1]}:{$matches[2]}:{$matches[3]}";
+    if (preg_match('/^(.+)anonymous\x00(.+?)[:(](\d+)/', $class, $matches)) {
+        return "{$matches[1]}{$matches[2]}:{$matches[3]}";
     }
 
     return $class;

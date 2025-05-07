@@ -13,8 +13,7 @@ function formatFunction(mixed $function): string
 {
     if (\is_string($function)) {
         if (!str_contains($function, '::')) {
-            /** @var non-empty-string */
-            return $function;
+            return $function . '()';
         }
 
         $function = explode('::', $function);
@@ -22,7 +21,7 @@ function formatFunction(mixed $function): string
 
     if (\is_array($function)) {
         /** @var array{class-string|object, non-empty-string} $function */
-        return \sprintf('%s::%s', formatClass($function[0]), $function[1]);
+        return \sprintf('%s::%s()', formatClass($function[0]), $function[1]);
     }
 
     if ($function instanceof \Closure) {
@@ -30,5 +29,5 @@ function formatFunction(mixed $function): string
     }
 
     /** @var object $function */
-    return \sprintf('%s::__invoke', formatClass($function));
+    return \sprintf('%s()', formatClass($function));
 }
