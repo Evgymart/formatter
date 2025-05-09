@@ -14,7 +14,7 @@ function formatReflectedFunction(\ReflectionFunctionAbstract $function): string
         return \sprintf('%s::%s()', formatClass($function->class), $function->name);
     }
 
-    if (!str_contains($function->name, '{closure}')) {
+    if (!str_starts_with($function->name, '{closure')) {
         $class = $function->getClosureCalledClass();
 
         if ($class !== null) {
