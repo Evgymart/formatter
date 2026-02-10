@@ -12,9 +12,20 @@ use PHPUnit\Framework\TestCase;
 final class FormatFunctionTest extends TestCase
 {
     /**
+     * @param callable $closure
+     */
+    #[DataProvider('provideFormatFunctionCases')]
+    public function testFormatFunction(mixed $closure, string $expectedFormattedFunction): void
+    {
+        $formatted = formatFunction($closure);
+
+        self::assertSame($expectedFormattedFunction, $formatted);
+    }
+
+    /**
      * @return \Generator<string, array{callable, non-empty-string}>
      */
-    public static function cases(): \Generator
+    public static function provideFormatFunctionCases(): iterable
     {
         yield 'brackets to string with ::' => [
             \sprintf('%s::cases', self::class),
@@ -54,16 +65,5 @@ final class FormatFunctionTest extends TestCase
             })(),
             \sprintf('function@%s:%d()', __FILE__, __LINE__ - 4),
         ];
-    }
-
-    /**
-     * @param callable $closure
-     */
-    #[DataProvider('cases')]
-    public function testFormatFunction(mixed $closure, string $expectedFormattedFunction): void
-    {
-        $formatted = formatFunction($closure);
-
-        self::assertSame($expectedFormattedFunction, $formatted);
     }
 }

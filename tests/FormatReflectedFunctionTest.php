@@ -12,10 +12,21 @@ use PHPUnit\Framework\TestCase;
 final class FormatReflectedFunctionTest extends TestCase
 {
     /**
+     * @param non-empty-string $expectedFormattedFunction
+     */
+    #[DataProvider('provideFormatReflectedFunctionCases')]
+    public function testFormatReflectedFunction(\ReflectionFunctionAbstract $function, string $expectedFormattedFunction): void
+    {
+        $formatted = formatReflectedFunction($function);
+
+        self::assertSame($expectedFormattedFunction, $formatted);
+    }
+
+    /**
      * @return \Generator<string, array{\ReflectionFunctionAbstract, non-empty-string}>
      * @throws \ReflectionException
      */
-    public static function cases(): \Generator
+    public static function provideFormatReflectedFunctionCases(): iterable
     {
         yield 'from object method' => [
             new \ReflectionMethod(new self('name'), 'testFormatReflectedFunction'),
@@ -41,17 +52,6 @@ final class FormatReflectedFunctionTest extends TestCase
             })(),
             \sprintf('function@%s:%d()', __FILE__, __LINE__ - 4),
         ];
-    }
-
-    /**
-     * @param non-empty-string $expectedFormattedFunction
-     */
-    #[DataProvider('cases')]
-    public function testFormatReflectedFunction(\ReflectionFunctionAbstract $function, string $expectedFormattedFunction): void
-    {
-        $formatted = formatReflectedFunction($function);
-
-        self::assertSame($expectedFormattedFunction, $formatted);
     }
 
     public function testFormatReflectedFunctionWhenFileNameIsUnavailable(): void

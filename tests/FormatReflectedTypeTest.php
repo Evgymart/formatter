@@ -11,11 +11,19 @@ use PHPUnit\Framework\TestCase;
 #[CoversFunction('Typhoon\Formatter\formatReflectedType')]
 final class FormatReflectedTypeTest extends TestCase
 {
+    #[DataProvider('provideFormatReflectedTypeCases')]
+    public function testFormatReflectedType(?\ReflectionType $type, string $expectedFormattedReflectionType): void
+    {
+        $formatted = formatReflectedType($type);
+
+        self::assertSame($expectedFormattedReflectionType, $formatted);
+    }
+
     /**
      * @return \Generator<string, array{null|\ReflectionType, string}>
      * @throws \ReflectionException
      */
-    public static function cases(): \Generator
+    public static function provideFormatReflectedTypeCases(): iterable
     {
         yield 'from null' => [null, ''];
         yield 'from exact type' => [
@@ -34,13 +42,5 @@ final class FormatReflectedTypeTest extends TestCase
             (new \ReflectionFunction(static fn(\IteratorAggregate&\Iterator $a) => null))->getParameters()[0]->getType(),
             'IteratorAggregate&Iterator',
         ];
-    }
-
-    #[DataProvider('cases')]
-    public function testFormatReflectedType(?\ReflectionType $type, string $expectedFormattedReflectionType): void
-    {
-        $formatted = formatReflectedType($type);
-
-        self::assertSame($expectedFormattedReflectionType, $formatted);
     }
 }

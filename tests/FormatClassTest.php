@@ -13,28 +13,6 @@ use PHPUnit\Framework\TestCase;
 final class FormatClassTest extends TestCase
 {
     /**
-     * @return \Generator<string, array{string|object, non-empty-string}>
-     */
-    public static function cases(): \Generator
-    {
-        yield 'from object' => [new \stdClass(), \stdClass::class];
-        yield 'from class-string' => [\stdClass::class, \stdClass::class];
-        yield 'from anonymous object' => [new class {}, \sprintf('class@%s:%d', __FILE__, __LINE__)];
-        yield 'from extended class' => [new class extends \ArrayObject {}, \sprintf('ArrayObject@%s:%d', __FILE__, __LINE__)];
-        yield 'from implemented class' => [
-            new class implements \IteratorAggregate {
-                public function getIterator(): \Traversable
-                {
-                    return new \ArrayIterator();
-                }
-            },
-            \sprintf('IteratorAggregate@%s:%d', __FILE__, __LINE__ - 6),
-        ];
-        yield 'from eval object' => [(object) eval('return new \stdClass();'), \stdClass::class];
-        yield 'from eval anonymous object' => [(object) eval('return new class {};'), \sprintf('class@%s:%d', __FILE__, __LINE__)];
-    }
-
-    /**
      * @param class-string|object $class
      * @param non-empty-string $expectedFormattedClass
      */
@@ -57,5 +35,27 @@ final class FormatClassTest extends TestCase
         $formatted = formatReflectedClass(new \ReflectionClass($class));
 
         self::assertSame($expectedFormattedClass, $formatted);
+    }
+
+    /**
+     * @return \Generator<string, array{string|object, non-empty-string}>
+     */
+    public static function cases(): iterable
+    {
+        yield 'from object' => [new \stdClass(), \stdClass::class];
+        yield 'from class-string' => [\stdClass::class, \stdClass::class];
+        yield 'from anonymous object' => [new class {}, \sprintf('class@%s:%d', __FILE__, __LINE__)];
+        yield 'from extended class' => [new class extends \ArrayObject {}, \sprintf('ArrayObject@%s:%d', __FILE__, __LINE__)];
+        yield 'from implemented class' => [
+            new class implements \IteratorAggregate {
+                public function getIterator(): \Traversable
+                {
+                    return new \ArrayIterator();
+                }
+            },
+            \sprintf('IteratorAggregate@%s:%d', __FILE__, __LINE__ - 6),
+        ];
+        yield 'from eval object' => [(object) eval('return new \stdClass();'), \stdClass::class];
+        yield 'from eval anonymous object' => [(object) eval('return new class {};'), \sprintf('class@%s:%d', __FILE__, __LINE__)];
     }
 }
